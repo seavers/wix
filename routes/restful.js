@@ -8,7 +8,11 @@ var ObjectID = require('mongodb').ObjectID;
 router.get('/:model', function(req, res, next) {
   console.log('[GET] ' + JSON.stringify(req.query));
   var entity = db.get(req.params.model);
-  entity.find(req.query, function(err, docs) {
+  var query = req.query;
+  if(query.q) {
+    query = eval("(" + query.q + ")");
+  }
+  entity.find(query, function(err, docs) {
     res.json(docs);
   });
 });
@@ -17,6 +21,15 @@ router.get('/:model', function(req, res, next) {
 router.get('/:model/:id', function(req, res) {
   var entity = db.get(req.params.model);
   entity.find({id: parseInt(req.params.id)}, function(err, docs) {
+    res.json(docs);
+  });
+});
+
+/* search listing. */
+router.search('/:model', function(req, res, next) {
+  console.log('[GET] ' + JSON.stringify(req.query));
+  var entity = db.get(req.params.model);
+  entity.find(req.body, function(err, docs) {
     res.json(docs);
   });
 });
