@@ -16,10 +16,6 @@ router.get('/login/sendmail', function(req, res, next) {
 function send(address) {
   console.log('[login] sendmail ' + address);  
 
-  // create reusable transporter object using the default SMTP transport
-  //var transporter = nodemailer.createTransport('smtps://55307885:glbmqevhcgdkbidc@smtp.qq.com');
-  var transporter = nodemailer.createTransport('smtps://lianghaijun001:hello1234@smtp.163.com');
-
   var passcode = Math.floor(Math.random() * 900000) + 100000;
 
   //write to db
@@ -35,8 +31,9 @@ function send(address) {
   };
 
   // create reusable transporter object using the default SMTP transport
-  //var transporter = nodemailer.createTransport('smtps://55307885:glbmqevhcgdkbidc@smtp.qq.com');
-  var transporter = nodemailer.createTransport('smtps://lianghaijun001:hello1234@smtp.163.com');
+  var config = require('../config.json');
+  console.log('[login] config ' + JSON.stringify(config));
+  var transporter = nodemailer.createTransport('smtps://lianghaijun001:' + config.mail_passcode + '@smtp.163.com');
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, function(error, info){
